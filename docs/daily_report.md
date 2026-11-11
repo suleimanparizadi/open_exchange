@@ -3,3 +3,9 @@ created the env file and database.
 connect the API to database.
 fix some minor bugs of apps.
 enhanced some part of settings 
+
+
+day 2
+write and fixed the user model and the user manager.
+migrate all user models to the database.
+
