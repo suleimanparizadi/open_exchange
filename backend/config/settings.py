@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'apps.market_data',
     'apps.trading',
     'apps.wallets',
+    'apps.admin_api'
 
 
 ]
