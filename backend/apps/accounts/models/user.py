@@ -28,7 +28,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     )
     is_phone_verified = models.BooleanField(default=False)
 
-    email = models.EmailField(max_length=225, null=True, blank=True, unique=True)
+    email = models.EmailField(max_length=225, unique=True)
     is_email_verified = models.BooleanField(default=False)
 
     first_name = models.CharField(max_length=125, blank=False)
@@ -36,7 +36,7 @@ class User(AbstractBaseUser, PermissionsMixin):
     
 
     is_active = models.BooleanField(default=True)
-    is_admin = models.BooleanField(default=False)
+    is_staff = models.BooleanField(default=False)
     date_of_birth = models.DateField(null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)   
@@ -73,12 +73,6 @@ class User(AbstractBaseUser, PermissionsMixin):
     
     def get_full_name(self):
         return f"{self.first_name} {self.last_name}".strip()
-
-
-
-    @property
-    def is_staff(self):
-        return self.is_admin
 
 
     def deactivate(self):

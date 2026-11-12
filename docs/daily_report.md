@@ -9,3 +9,6 @@ day 2
 write and fixed the user model and the user manager.
 migrate all user models to the database.
 
+day 3 
+added the OTP models.
+changing the AI assistant to chatGPT 
