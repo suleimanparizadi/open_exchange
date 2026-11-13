@@ -11,4 +11,7 @@ migrate all user models to the database.
 
 day 3 
 added the OTP models.
-changing the AI assistant to chatGPT 
+
+day 4
+write the OTP model in the email and phone OTP
+working on OTP services 
