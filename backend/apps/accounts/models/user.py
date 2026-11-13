@@ -18,14 +18,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True
     )
 
-    phone_number = models.CharField(max_length=11, unique=True, 
-    validators=[
-        RegexValidator(
-        regex=r'^09\d{9}$',
-        message='Phone number must be in this format: 09xxxxxxxxx'
-            )
-        ]
-    )
+    phone_number = models.CharField(max_length=11, unique=True, )
     is_phone_verified = models.BooleanField(default=False)
 
     email = models.EmailField(max_length=225, unique=True)
