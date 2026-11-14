@@ -24,5 +24,9 @@ to keep it simple and take less processing power.
 
 phone format is Iran-specific
 
+separated Email and phone one time password model and services.
+
+
+
 
 

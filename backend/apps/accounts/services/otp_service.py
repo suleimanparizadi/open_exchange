@@ -90,7 +90,7 @@ class OTPService:
                 "expired_at": now + timedelta(minutes=self.EXPIRY_TIME),
             })
 
-        send_otp_status = self.send_otp()
+        send_otp_status = self.send_otp(code)
         if send_otp_status:
             return ServiceResult.success(
                 message="OTP sended successfully!",
@@ -105,5 +105,91 @@ class OTPService:
             )
 
         
+    @transaction.atomic
+    def verify_code(self, input_code):
+
+        if not input_code:
+            return ServiceResult.fail(
+                message="Code is required",
+                code="INVALID_INPUT"
+            )
+
+        identifier = self.get_identifier()
+        try:
+            otp = self.otp_model.objects.select_for_update().get(
+                **identifier
+            )
+        except self.otp_model.DoesNotExist:
+            return ServiceResult.fail(
+                message="No active verifications found. Please request a new one",
+                code="OTP_NOT_FOUND"
+            )
+
+        if otp.is_expired():
+            otp.delete()
+            return ServiceResult.fail(
+                message="The one time password is expired",
+                code="OTP_EXPIRED"
+            )
+
+
+        if not check_password(input_code, otp.code_hash):
+            otp.attempts += 1
 
         
+            if otp.attempts >= self.MAX_ATTEMPT:
+                otp.delete()
+                return ServiceResult.fail(
+                    message="Too many failed attempts. Please request a new OTP.",
+                    code="MAX_ATTEMPTS_EXCEEDED"
+                )
+
+
+            otp.save(update_fields=['attempts'])
+            remaining_attempts = self.MAX_ATTEMPT - otp.attempts
+            return ServiceResult.fail(
+                message=f"Invalid code, try again. {remaining_attempts} attempts remain",
+                code="INVALID_CODE"
+            )
+
+
+        otp.delete()
+        return ServiceResult.success(
+            message="One time password is verified successfully!",
+            data= self.get_identifier()
+        )
+
+
+
+class PhoneOTPService(OTPService):
+    otp_model = PhoneOTP
+    identifier_field = 'phone_number'
+    EXPIRY_TIME = PhoneOTP.EXPIRY_MINUTES
+    MAX_ATTEMPT = PhoneOTP.MAX_ATTEMPTS
+
+    def send_otp(self, code):
+
+        """
+        Integrated SMS provider
+        """
+        print(f"{self.identifier}:{code}")
+        return True
+
+
+
+class EmailOTPService(OTPService):
+
+    otp_model = EmailOTP
+    identifier_field = 'email'
+    EXPIRY_TIME = EmailOTP.EXPIRY_MINUTES
+    MAX_ATTEMPT = EmailOTP.MAX_ATTEMPTS
+
+
+    def send_otp(self, code):
+
+        """
+        Integrated Email provider 
+        """
+        print(f"{self.identifier}:{code}")
+
+        return True
