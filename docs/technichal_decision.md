@@ -27,6 +27,8 @@ phone format is Iran-specific
 separated Email and phone one time password model and services.
 
 
+the authentications will be based on the simple JWT tokens
+
 
 
 

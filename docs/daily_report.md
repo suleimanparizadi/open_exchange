@@ -15,3 +15,7 @@ added the OTP models.
 day 4
 write the OTP model in the email and phone OTP
 working on OTP services 
+
+day 5
+the OTP service is fixed.
+the service for register unverified users is done.
