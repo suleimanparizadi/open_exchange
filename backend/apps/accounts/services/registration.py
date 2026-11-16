@@ -12,7 +12,7 @@ class UserRegistration:
 
 
     @staticmethod
-    def registration(self, first_name, last_name,phone_number, email,
+    def registration( first_name, last_name,phone_number, email,
                      password, date_of_birth=None):
 
         if  not first_name :
@@ -62,3 +62,41 @@ class UserRegistration:
             return ServiceResult.fail(
                 message="A user with this email or phone number already exists."
             )
+
+
+
+class UserVerificationService:
+
+
+    @staticmethod
+    def send_phone_otp(user):
+        return PhoneOTPService(identifier=user.phone_number).create_otp()
+
+
+
+    @staticmethod
+    def send_email_otp(user):
+        return EmailOTPService(identifier=user.email).create_otp()
+
+
+
+    @staticmethod
+    def verify_phone(user, code):
+        result = PhoneOTPService(identifier=user.phone_number).verify_code(code)
+        if not result.success:
+            return result
+        user.is_phone_verified = True
+        user.save(update_fields=["is_phone_verified", "updated_at"])
+        return ServiceResult.success(message="Phone verified successfully")
+
+
+
+    @staticmethod
+    def verify_email(user, code):
+        result = EmailOTPService(identifier=user.email).verify_code(code)
+        if not result.success:
+            return result
+        user.is_email_verified = True
+        user.save(update_fields=["is_email_verified", "updated_at"])
+        return ServiceResult.success(message="Email verified successfully")
+    
