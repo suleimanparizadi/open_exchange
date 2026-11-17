@@ -1,6 +1,5 @@
 from django.contrib.auth import get_user_model
-from django.db import transaction, IntegrityError
-from django.core.exceptions import ValidationError
+from django.db import IntegrityError
 from utils.service_result import ServiceResult
 from apps.accounts.services.otp_service import PhoneOTPService, EmailOTPService
 

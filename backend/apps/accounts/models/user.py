@@ -18,7 +18,7 @@ class User(AbstractBaseUser, PermissionsMixin):
         unique=True
     )
 
-    phone_number = models.CharField(max_length=11, unique=True, )
+    phone_number = models.CharField(max_length=11, unique=True)
     is_phone_verified = models.BooleanField(default=False)
 
     email = models.EmailField(max_length=225, unique=True)
