@@ -30,5 +30,8 @@ separated Email and phone one time password model and services.
 the authentications will be based on the simple JWT tokens
 
 
+Login remains phone + password. OTP-only login rejected: single-factor risk (SIM swap), no security gain over existing flow, and real exchanges treat OTP as a second factor, not a primary one.
 
 
+
+"Login uses phone_number + password. Email login rejected: it does not mitigate SIM swap (which attacks the phone channel, not the login form) and introduces email takeover as an alternate attack path. SIM swap risk is mitigated by not using SMS OTP for login and by preferring email OTP for sensitive actions. TOTP considered for Phase 6+
